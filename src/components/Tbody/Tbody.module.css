@@ -1,0 +1,33 @@
+.text {
+  text-align: center;
+}
+
+.content {
+  width: clamp(15px, 200px, 400px);
+  padding: 12px;
+  text-wrap: balance;
+  font-size: var(--fonts-size);
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: var(--background-td-odd);
+}
+.links {
+  text-wrap: balance;
+  padding: 12px;
+  height: 10px;
+  font-size: var(--fonts-size);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.content .body {
+  background-color: #fff;
+}

@@ -1,0 +1,10 @@
+.thead {
+  height: 104px;
+  text-align: left;
+  max-height: 104px;
+  background-color: var(--background-header);
+  vertical-align: bottom;
+}
+.content th {
+  text-align: center;
+}

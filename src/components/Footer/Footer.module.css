@@ -1,0 +1,21 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  max-width: 1440px;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background-color: rgb(244, 247, 252, 0.75);
+  position: fixed;
+  bottom: 0;
+
+  backdrop-filter: blur(4px);
+}
+
+.rowsPage {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}
