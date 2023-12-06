@@ -1,33 +1,38 @@
 // import React from 'react';
-import { options } from '../../types';
-import { isValidDate } from '../../util/IsValidDate';
+import { TResults } from '../../types';
 import styles from './Tbody.module.css';
-// import cn from 'class'
+import useTable from '../../hooks/useTable';
+import CheckValueString from './CheckValueString';
 
 interface TbodyProps {
-  value: string | number;
+  rows: number;
+  data: TResults[];
+  columns: string[];
+  page: number;
 }
 
-const Tbody = ({ value }: TbodyProps) => {
-  const date = new Date(value);
-  if (Array.isArray(value)) {
-    return <td className={styles.links}>{value.join(' ')}</td>;
-  }
-  if (typeof value === 'object') {
-    return <td>dfg</td>;
-  }
-  if (
-    isValidDate(value) &&
-    !isNaN(date.getTime()) &&
-    typeof value !== 'number'
-  ) {
-    return (
-      <td className={styles.content}>
-        {new Intl.DateTimeFormat('en-US', options).format(date)}
-      </td>
-    );
-  }
-  return <td className={styles.content}>{value}</td>;
+const Tbody = ({ data, rows, columns, page }: TbodyProps) => {
+  const { slice } = useTable(data, page, rows);
+
+  return (
+    <>
+      <div className={styles.tbody}>
+        {slice.map((item, index) => {
+          return (
+            <div key={index} className={styles.rows}>
+              {columns.map((column, index) => {
+                return (
+                  <div className={styles.value} key={index}>
+                    <CheckValueString value={item[column]} />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
 };
 
 export default Tbody;

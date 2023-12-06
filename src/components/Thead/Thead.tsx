@@ -1,13 +1,17 @@
 import styles from './Thead.module.css';
 interface Thead {
-  item: React.ReactNode;
+  data: string[];
 }
 
-const Thead = ({ item }: Thead) => {
+const Thead = ({ data }: Thead) => {
   return (
-    <thead className={styles.thead}>
-      <tr className={styles.content}>{item}</tr>
-    </thead>
+    <div className={styles.thead}>
+      {data.map((value, index) => (
+        <span className={styles.content} key={index}>
+          {value}
+        </span>
+      ))}
+    </div>
   );
 };
 

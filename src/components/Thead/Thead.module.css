@@ -1,10 +1,19 @@
 .thead {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
   height: 104px;
-  text-align: left;
   max-height: 104px;
   background-color: var(--background-header);
-  vertical-align: bottom;
 }
-.content th {
-  text-align: center;
+.content {
+  flex-grow: 1;
+  width: clamp(36px, 25%, 250px);
+  padding: 8px;
+  font-weight: 600;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.44px;
+  font-size: 11px;
+  font-style: normal;
 }

@@ -28,6 +28,7 @@
   --background-td-odd: #f9fafc;
 
   --fonts-size: 16px;
+  --fonts-size-regular: 14px;
   --font-size-small: 12px;
 
   text-rendering: optimizeLegibility;

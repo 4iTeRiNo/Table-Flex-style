@@ -1,20 +1,15 @@
 import axios from 'axios';
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
+import { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import dataReducer from './dataReducer';
 import Tbody from './components/Tbody/Tbody';
 
 import './App.css';
 import { TDataList } from './types';
 import Thead from './components/Thead/Thead';
-import { useDebounce } from './util/debounce';
+import { useDebounce } from './hooks/debounce';
 import Footer from './components/Footer/Footer';
-import Pagination from './components/Footer/Pagination/Pagination';
+import Loader from './components/Loader/Loader';
+import SelectApi from './components/SelectApi/SelectApi';
 
 function App() {
   const FIRST_API_URL = 'https://rickandmortyapi.com/api/location';
@@ -26,15 +21,8 @@ function App() {
   const [state, dispatch] = useReducer(dataReducer, { status: 'empty' });
   const debouncedValue = useDebounce<string>(value, 500);
 
-  const [rows, setRows] = useState<number>(5);
+  const [rows, setRows] = useState<number>(15);
   const [page, setPage] = useState(1);
-  const [isOpen, setOpen] = useState(false);
-
-  const lastIndex = page * rows;
-  const firstIndex = lastIndex - rows;
-
-  // const getTotalPageCount = (rowCount: number): number =>
-  //   Math.ceil(rowCount / rows);
 
   useEffect(() => {
     let ignore = false;
@@ -61,79 +49,29 @@ function App() {
 
   return (
     <div className="App">
-      <select className="select" value={value} onChange={handleChange}>
-        {option}
-      </select>
-      {state.status === 'loading' && (
-        <span>
-          Loading...
-          <div className="lds-ellipsis">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </span>
-      )}
+      <SelectApi option={option} value={value} handleChange={handleChange} />
+      {state.status === 'loading' && <Loader />}
 
       {state.status === 'success' && state.data.results && (
-        <table className="Table">
-          <Thead
-            item={state.columns.map((item, index) => (
-              <th className="content" key={index}>
-                {item}
-              </th>
-            ))}
-          />
-          <tbody>
-            {state.data.results
-              .slice(firstIndex, lastIndex)
-              .map((item, index) => {
-                return (
-                  <tr key={index}>
-                    {state.columns.map((column, index) => {
-                      return <Tbody key={index} value={item[column]} />;
-                    })}
-                  </tr>
-                );
-              })}
-          </tbody>
-          <Footer totalRows={`${page}-${rows} of ${state.data.results.length}`}>
-            <div className="rowsWrap">
-              {'Rows per page:'}
-              <div className="dropdown">
-                <div
-                  onClick={() => {
-                    setOpen(!isOpen);
-                  }}
-                  className="dropdown-btn"
-                >
-                  {rows}
-                  <span
-                    className={isOpen ? 'fas fa-caret-up' : 'fas fa-caret-down'}
-                  />
-                </div>
-                <div
-                  className="dropdown-content"
-                  style={{ display: isOpen ? 'block' : 'none' }}
-                >
-                  {rowsTable.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => {
-                        setRows(item);
-                        setOpen(!isOpen);
-                      }}
-                      className="item"
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Footer>
-        </table>
+        <>
+          <div className="table">
+            <Thead data={state.columns} />
+            <Tbody
+              data={state.data.results}
+              rows={rows}
+              columns={state.columns}
+              page={page}
+            />
+            <Footer
+              page={page}
+              data={state.data.results}
+              rows={rows}
+              setPage={setPage}
+              setRows={setRows}
+              rowsTable={rowsTable}
+            />
+          </div>
+        </>
       )}
 
       {state.status === 'error' && <span>Error: {state.error}</span>}

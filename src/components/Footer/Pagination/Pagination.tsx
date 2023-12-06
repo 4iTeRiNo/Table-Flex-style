@@ -1,55 +1,33 @@
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import styles from './Pagination.module.css';
-// import { as Left} from '../../assets/icons/left.svg';
-// import Right from '../../assets/icons/right.svg';
+import right from '../../../assets/icons/right.svg';
+import left from '../../../assets/icons/left.svg';
 
-type PaginationProps = {
-  onNextPageClick: () => void;
-  onPrevPageClick: () => void;
-  disable: {
-    left: boolean;
-    right: boolean;
-  };
-  nav?: {
-    current: number;
-    total: number;
-  };
-};
+interface PaginationProps {
+  setPage: Dispatch<SetStateAction<number>>;
+  page: number;
+  range: number[];
+}
 
-const Pagination = (props: PaginationProps) => {
-  const { nav = null, disable, onNextPageClick, onPrevPageClick } = props;
-  const handleNextPageClick = () => {
-    onNextPageClick;
-  };
-  const handlePrevPageClick = () => {
-    onPrevPageClick;
-  };
-
+const Pagination = ({ setPage, page, range }: PaginationProps) => {
   return (
-    <div className={styles.paginator}>
+    <div className={styles.pagination}>
       <button
-        className={styles.arrow}
-        type="button"
-        onClick={handlePrevPageClick}
-        disabled={disable.left}
+        disabled={page === 1}
+        className={styles.button}
+        onClick={() => setPage(page - 1)}
       >
-        {'<'}
+        <img className={styles.icon} src={left} width="16px" alt="icon" />
       </button>
-      {nav && (
-        <span className={styles.navigation}>
-          {nav.current} / {nav.total}
-        </span>
-      )}
+      {`${page}/${range.length}`}
       <button
-        className={styles.arrow}
-        type="button"
-        onClick={handleNextPageClick}
-        disabled={disable.right}
+        disabled={page === range.length}
+        className={styles.button}
+        onClick={() => setPage(page + 1)}
       >
-        {'>'}
+        <img className={styles.icon} src={right} width="16px" alt="icon" />
       </button>
     </div>
   );
 };
-
-export default React.memo(Pagination);
+export default Pagination;
