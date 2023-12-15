@@ -3,7 +3,13 @@ import { Action, State } from './types';
 const dataReduce = (state: State, action: Action): State => {
   switch (action.type) {
     case 'request':
-      return { status: 'loading', data: [], error: null };
+      return { status: 'empty', data: [], error: null };
+    case 'loading':
+      return {
+        status: 'loading',
+        data: [],
+        error: action.error,
+      };
     case 'success':
       return {
         status: 'success',

@@ -2,7 +2,7 @@ import styles from './Loader.module.css';
 
 const Loader = () => {
   return (
-    <span>
+    <div className={styles.loader}>
       Loading...
       <div className={styles.ldsEllipsis}>
         <div></div>
@@ -10,7 +10,7 @@ const Loader = () => {
         <div></div>
         <div></div>
       </div>
-    </span>
+    </div>
   );
 };
 export default Loader;

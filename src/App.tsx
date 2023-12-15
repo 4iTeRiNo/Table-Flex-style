@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ChangeEvent, useEffect, useReducer, useState } from 'react';
-import useDebounce from './hooks/debounce';
+// import useDebounce from './hooks/debounce';
 import { useData } from './hooks/useData';
 import { initialState } from './types';
 import { FIRST_API_URL, SET_API_URl, rowsTable } from './constants';
@@ -22,10 +22,6 @@ function App() {
 
   const [state, dispatch] = useReducer(dataReducer, initialState);
 
-  const debouncedValue = useDebounce<string>(value, 1000);
-
-  // const [loading, setLoading] = useState(false);
-
   // const getRandomQuote = () => {
   //   setLoading(true);
   //   setTimeout(() => {
@@ -34,19 +30,23 @@ function App() {
   // };
 
   useEffect(() => {
+    dispatch({ type: 'request', payload: [], error: null });
+
     dispatch({ type: 'loading', payload: [], error: null });
 
-    axios(debouncedValue).then(
-      (responsive) => {
-        dispatch({
-          type: 'success',
-          payload: responsive.data.results,
-          error: null,
-        });
-      },
-      (error) => dispatch({ type: 'failure', payload: [], error: error }),
-    );
-  }, [debouncedValue]);
+    setTimeout(() => {
+      axios(value).then(
+        (responsive) => {
+          dispatch({
+            type: 'success',
+            payload: responsive.data.results,
+            error: null,
+          });
+        },
+        (error) => dispatch({ type: 'failure', payload: [], error: error }),
+      );
+    }, 2000);
+  }, [value]);
 
   const option = SET_API_URl.map((url, index) => (
     <option key={index}>{url}</option>
@@ -61,7 +61,6 @@ function App() {
   return (
     <div className="App">
       <SelectApi option={option} value={value} handleChange={handleChange} />
-
       {state.status === 'loading' && <Loader />}
 
       {state.data && (
