@@ -1,16 +1,28 @@
+import { Dispatch, SetStateAction, useContext } from 'react';
+
 import styles from './Thead.module.css';
-interface Thead {
-  data: string[];
+import { stateContext } from '../../StateContext';
+import Search from '../SearchInput/SearchInput';
+
+interface TheadProps {
+  setSearchValue: Dispatch<SetStateAction<string>>;
 }
 
-const Thead = ({ data }: Thead) => {
+const Thead = ({ setSearchValue }: TheadProps) => {
+  const data = useContext(stateContext);
+  const column = Object.keys(Object.assign({}, ...data));
+
   return (
     <div className={styles.thead}>
-      {data.map((value, index) => (
-        <span className={styles.content} key={index}>
-          {value}
-        </span>
-      ))}
+      <Search onChange={setSearchValue} />
+
+      <div className={styles.column}>
+        {column.map((value, index) => (
+          <span className={styles.content} key={index}>
+            {value}
+          </span>
+        ))}
+      </div>
     </div>
   );
 };

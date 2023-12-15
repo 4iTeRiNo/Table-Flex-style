@@ -1,35 +1,38 @@
-import { SetStateAction, Dispatch } from 'react';
+import { SetStateAction, Dispatch, useContext } from 'react';
 import styles from './Footer.module.css';
 import RowPerPage from './Pagination/RowPerPage';
 import Pagination from './Pagination/Pagination';
-import { TResults } from '../../types';
 import useTable from '../../hooks/useTable';
+import { stateContext } from '../../StateContext';
 
 interface FooterProps {
-  setPage: Dispatch<SetStateAction<number>>;
   page: number;
-  data: TResults[];
   rowsTable: number[];
   rows: number;
+  setPage: Dispatch<SetStateAction<number>>;
   setRows: Dispatch<SetStateAction<number>>;
 }
 
-const Footer = ({
-  setPage,
-  page,
-  data,
-  rowsTable,
-  rows,
-  setRows,
-}: FooterProps) => {
-  const { range } = useTable(data, page, rows);
+const Footer = ({ setPage, page, rowsTable, rows, setRows }: FooterProps) => {
+  const data = useContext(stateContext);
+
+  const { range, slice } = useTable(data, page, rows);
+
+  const rowIndex = slice.map((el, index) => {
+    if (index === 0) {
+      return el?.id;
+    }
+    if (index === slice.length - 1) {
+      return el?.id;
+    }
+  });
 
   return (
     <footer className={styles.footer}>
       <div>
-        <span>{1}</span>
+        <span>{rowIndex.shift()}</span>
         {'-'}
-        <span>{rows}</span>
+        <span>{rowIndex.pop()}</span>
         {' of '}
         <span>{data.length}</span>
       </div>

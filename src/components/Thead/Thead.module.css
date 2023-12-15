@@ -1,10 +1,15 @@
 .thead {
   display: flex;
-  flex-direction: row;
-  align-items: end;
+  flex-direction: column;
+  justify-content: space-around;
   height: 104px;
   max-height: 104px;
   background-color: var(--background-header);
+}
+.column {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
 }
 .content {
   flex-grow: 1;
@@ -16,4 +21,11 @@
   letter-spacing: 0.44px;
   font-size: 11px;
   font-style: normal;
+}
+
+.content:first-child {
+  width: 5%;
+}
+.content:last-child {
+  width: 10%;
 }

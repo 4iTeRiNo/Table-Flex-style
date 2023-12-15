@@ -1,42 +1,51 @@
 import axios from 'axios';
 import { ChangeEvent, useEffect, useReducer, useState } from 'react';
-import dataReducer from './dataReducer';
-import Tbody from './components/Tbody/Tbody';
+import useDebounce from './hooks/debounce';
+import { useData } from './hooks/useData';
+import { initialState } from './types';
+import { FIRST_API_URL, SET_API_URl, rowsTable } from './constants';
+import { stateContext } from './StateContext';
 
-import './App.css';
-import { TDataList } from './types';
 import Thead from './components/Thead/Thead';
-import { useDebounce } from './hooks/debounce';
+import Tbody from './components/Tbody/Tbody';
 import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
+import dataReducer from './dataReducer';
 import SelectApi from './components/SelectApi/SelectApi';
+import './App.css';
 
 function App() {
-  const FIRST_API_URL = 'https://rickandmortyapi.com/api/location';
-  const SECOND_API_URL = 'https://rickandmortyapi.com/api/character';
-  const SET_API_URl = [FIRST_API_URL, SECOND_API_URL];
-  const rowsTable = [5, 10, 15, 20, 30, 40, 50];
-
   const [value, setValue] = useState(FIRST_API_URL);
-  const [state, dispatch] = useReducer(dataReducer, { status: 'empty' });
-  const debouncedValue = useDebounce<string>(value, 500);
-
   const [rows, setRows] = useState<number>(15);
   const [page, setPage] = useState(1);
+  const [searchValue, setSearchValue] = useState('');
+
+  const [state, dispatch] = useReducer(dataReducer, initialState);
+
+  const debouncedValue = useDebounce<string>(value, 1000);
+
+  // const [loading, setLoading] = useState(false);
+
+  // const getRandomQuote = () => {
+  //   setLoading(true);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 500);
+  // };
 
   useEffect(() => {
-    let ignore = false;
-    dispatch({ type: 'request' });
+    dispatch({ type: 'loading', payload: [], error: null });
 
-    axios<TDataList>(debouncedValue).then(
+    axios(debouncedValue).then(
       (responsive) => {
-        if (!ignore) dispatch({ type: 'success', results: responsive.data });
+        dispatch({
+          type: 'success',
+          payload: responsive.data.results,
+          error: null,
+        });
       },
-      (error) => dispatch({ type: 'failure', error }),
+      (error) => dispatch({ type: 'failure', payload: [], error: error }),
     );
-    return () => {
-      ignore = true;
-    };
   }, [debouncedValue]);
 
   const option = SET_API_URl.map((url, index) => (
@@ -47,31 +56,28 @@ function App() {
     setValue(event.target.value);
   };
 
+  const data = useData(state.data, searchValue);
+
   return (
     <div className="App">
       <SelectApi option={option} value={value} handleChange={handleChange} />
+
       {state.status === 'loading' && <Loader />}
 
-      {state.status === 'success' && state.data.results && (
-        <>
+      {state.data && (
+        <stateContext.Provider value={data}>
           <div className="table">
-            <Thead data={state.columns} />
-            <Tbody
-              data={state.data.results}
-              rows={rows}
-              columns={state.columns}
-              page={page}
-            />
+            <Thead setSearchValue={setSearchValue} />
+            <Tbody rows={rows} page={page} />
             <Footer
               page={page}
-              data={state.data.results}
               rows={rows}
               setPage={setPage}
               setRows={setRows}
               rowsTable={rowsTable}
             />
           </div>
-        </>
+        </stateContext.Provider>
       )}
 
       {state.status === 'error' && <span>Error: {state.error}</span>}

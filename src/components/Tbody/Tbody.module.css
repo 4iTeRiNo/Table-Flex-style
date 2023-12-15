@@ -17,6 +17,11 @@
   letter-spacing: 0.28px;
 }
 
+.deuce {
+  display: flex;
+  flex-direction: column;
+}
+
 .value {
   flex-grow: 1;
   width: clamp(36px, 25%, 250px);
@@ -24,4 +29,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.value:first-child {
+  width: 5%;
+}
+
+.value:last-child {
+  width: 10%;
 }

@@ -1,24 +1,19 @@
-export type State =
-  | { status: 'empty' }
-  | { status: 'loading' }
-  | { status: 'error'; error: string }
-  | { status: 'success'; data: TDataList; columns: string[] };
-
-export type Action =
-  | { type: 'request' }
-  | { type: 'success'; results: TDataList }
-  | { type: 'failure'; error: string };
-
-export type TDataList = {
-  info: TInfo;
-  results: TResults[];
+export type State = {
+  status: 'empty' | 'loading' | 'error' | 'success';
+  data: TResults[];
+  error: string | null;
 };
 
-type TInfo = {
-  count: number;
-  pages: number;
-  next: string;
-  prev: string | null;
+export type Action = {
+  type: 'request' | 'loading' | 'success' | 'failure';
+  payload: [];
+  error: string | null;
+};
+
+export const initialState: State = {
+  status: 'empty',
+  data: [],
+  error: '',
 };
 
 export type TResults =

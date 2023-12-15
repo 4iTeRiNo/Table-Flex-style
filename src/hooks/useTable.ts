@@ -12,6 +12,7 @@ const calculateRange = (data: TResults[], rowsPerPage: number) => {
 const sliceData = (data: TResults[], page: number, rowsPerPage: number) => {
   return data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 };
+
 const useTable = (data: TResults[], page: number, rowsPerPage: number) => {
   const [tableRange, setTableRange] = useState<number[]>([]);
   const [slice, setSlice] = useState<TResults[]>([]);
