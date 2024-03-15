@@ -1,7 +1,6 @@
 ![Teshnologes](https://img.shields.io/badge/Technologes-blue) :
 ![TypeScript](https://img.shields.io/badge/TypeSctipt-3178C6?style=flat-square&logo=TS)
 ![React](https://img.shields.io/badge/React-black?style=flat-square&logo=react)
-![Redux](https://img.shields.io/badge/Redux-7a0661?style=flat-square&logo=redux)
 ![Axios](https://img.shields.io/badge/Axios/Fetch-black?style=flat-square&logo=axios)
 
 <div align="center">
@@ -12,10 +11,11 @@
 
 ## Что было сделано?
 - Сверстал динамическую таблицу;
-- Создал кастомные хуки для валидации вводимых данных в ячейки перед отправкой на сервер;
-- Создал центролизованный store, reduce для обновления данных, asyncThunk для запроса на сервер;
-- Добавил loader в качесте информации об  успешной/не-успешной отправки данных на сервери и preLoader загрузки данных;
+- Создал кастомные хуки для сортироки данных и поиска данных в таблице и возможность выбрать количество отображаемых строк в таблице;
+- Создал пагинацию в обе стороны;
+- Запросы на сервер реализован с помощью библиотеки Axios, проект написан на React c применением хуков(useContext, useState, useReducer, useEffect);
+- Добавил preLoader загрузки данных;
 
-###  Ссылка на развернутое приложение https://table-train.vercel.app/;
+###  Ссылка на развернутое приложение [туть](https://it-workin-test-task.vercel.app/);
 
 
